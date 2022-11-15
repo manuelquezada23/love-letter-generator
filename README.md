@@ -1,6 +1,6 @@
-# Coding Cupids - Love Letter Generator
+## Coding Cupids - Love Letter Generator
 
-Manuel Quezada (mquezad1), Samantha Gundotra (sgundotr), Jose Urruticoechea (jurrutic), Juan Pablo Ramos Barroso (jramosba)
+by Manuel Quezada (mquezad1), Samantha Gundotra (sgundotr), Jose Urruticoechea (jurrutic), Juan Pablo Ramos Barroso (jramosba)
 
 ### Introduction
 For our project we want to build a love-letter generator to revive modern romance. Users will input their recipient and we will generate a love letter (chunk of text) tailored to them. Our project falls into Natural Language Processing (NLP).
