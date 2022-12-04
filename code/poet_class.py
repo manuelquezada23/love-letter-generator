@@ -1,6 +1,6 @@
 import model
 import re
-import np
+import numpy as np
 
 class Poet:
     WEIGHT_PATH = "model/weights.h5"
@@ -15,10 +15,10 @@ class Poet:
         self.model.load_weights(self.WEIGHT_PATH) 
         self.name = name
         self.lover = lover
-        words_mapping = data_dict['words_mapping']
-        characters = words_mapping['characters']
-        n_to_char = words_mapping['n_to_char']
-        char_to_n = words_mapping['char_to_n']
+        self.words_mapping = data_dict['words_mapping']
+        self.characters = self.words_mapping['characters']
+        self.n_to_char = self.words_mapping['n_to_char']
+        self.char_to_n = self.words_mapping['char_to_n']
 
         
     def random_sentence(corpus, min_seq=64, max_seq=128):
