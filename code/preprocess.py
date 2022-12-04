@@ -35,7 +35,7 @@ def read_poems(data_path):
                            'corpus': file})
     return poem_data
 
-def clean_data():
+def clean_data(corpus):
     ############ Character per doc.
     chars = [len(x['corpus']) for x in corpus]
     print('\nCharacters per doc:\n', pd.Series(chars).describe())
@@ -44,7 +44,6 @@ def clean_data():
     print('docs removed:', len(corpus) - sum(idx))
     corpus = list(np.array(corpus)[np.array(idx)])
 
-
     ############ lines per doc, remove single liners
     lines = [len(x['corpus'].split('\n')) for x in corpus]
     print('\nLines per doc:\n', pd.Series(lines).describe())
@@ -52,7 +51,6 @@ def clean_data():
     idx = [((x > 8) & (x < 50)) for x in lines]
     print('docs removed:', len(corpus) - sum(idx))
     corpus = list(np.array(corpus)[np.array(idx)])
-
 
     ############ words count.
     words = [len(re.findall(r'\w+', x['corpus'])) for x in corpus]
@@ -275,7 +273,7 @@ def get_data():
     poem_dir_path = '../poetry_data/'
     poem_corpus = read_poems(poem_dir_path)
 
-    corpus = clean_data()
+    corpus = clean_data(poem_corpus)
 
     characters, n_to_char, char_to_n =  get_vocabulary(corpus)
 
@@ -289,7 +287,7 @@ def get_data():
 
     corpus_train, corpus_test = corpus_split(poem_corpus, split=SPLIT)
 
-    train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, max_seq=MAX_SEQ, stride=STRIDE)
+    train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
 
     # Merge all data in one dict
     data = {'corpus': corpus,
