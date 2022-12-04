@@ -240,7 +240,7 @@ def get_tensor_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
   
   return train_x, train_y, test_x, test_y
 
-def get_data(train_file, test_file):
+def get_data():
     """
     Read and parse the train and test file line by line, then tokenize the sentences to build the train and test data separately.
     Create a vocabulary dictionary that maps all the unique tokens from your train and test data as keys to a unique integer value.
@@ -268,7 +268,7 @@ def get_data(train_file, test_file):
     # OUTPUT_FILE = 'NLP_data_poems_120_no-split'
 
     # read all .txt poems files
-    poem_dir_path = 'data/'
+    poem_dir_path = '../poetry_data/'
     poem_corpus = read_poems(poem_dir_path)
 
     corpus = clean_data()

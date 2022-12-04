@@ -6,7 +6,7 @@ class Poet:
     HIDDEN_UNITS = [512, 512, 512, 512, 512]
     embedding_to_char = {"a": 1} # TODO: THIS IS JUST A PLACEHOLDER 
 
-    def __init__(self, name, lover):
+    def __init__(self, name, lover, data_dict):
         self.model = model.LoveLetterGeneratorModel(batch_sz = 1, 
                     encoding_dimension = [len(self.embedding_to_char), self.EMBED_OUT],
                     hidden_units = self.HIDDEN_UNITS,
