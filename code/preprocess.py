@@ -6,12 +6,14 @@ from functools import reduce
 import os
 import re
 import pickle
+import glob
 
 """
 reads poem corpus
 """
 def read_poems(data_path):
-    poems = os.listdir(data_path)
+    # https://stackoverflow.com/questions/7099290/how-to-ignore-hidden-files-using-os-listdir
+    poems = glob.glob(os.path.join(data_path, '*'))
     print('Processing:', len(poems), 'files\n')
 
     poem_data = []
@@ -22,6 +24,7 @@ def read_poems(data_path):
         poem_file_path = data_path + poem
         with open(poem_file_path, "rb") as poem_file:
             file = poem_file.read()
+            # print(file)
             file = file.decode('utf8')
             # lower case
             file = file.lower()
