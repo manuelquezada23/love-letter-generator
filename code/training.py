@@ -1,5 +1,6 @@
 import pickle
 from model import LoveLetterGeneratorModel
+from tensorflow.keras.callbacks import ModelCheckpoint
 
 EPOCHS = 30
 BATCH_SIZE = 256
@@ -31,12 +32,10 @@ model = LoveLetterGeneratorModel(batch_sz = BATCH_SIZE,
 
 sample_train = (len(train_x)//BATCH_SIZE)*BATCH_SIZE
 
-checkpoint = ModelCheckpoint(str(MODEL_PATH + MODEL_NAME + '_ckpt.h5'),
-                             # save_best_only=True, monitor='val_loss',
+checkpoint = ModelCheckpoint(str(MODEL_PATH + MODEL_NAME + '.h5'),
                              verbose=1, period=3)
 
 model_history = model.fit(train_x[:sample_train,:], train_y[:sample_train,:],
                           epochs = EPOCHS,
                           batch_size = BATCH_SIZE,
-                          #validation_data = (test_x[:sample_test,:], test_y[:sample_test,:]),
-                          callbacks = [checkpoint]) #, early_stop])
+                          callbacks = [checkpoint]) 
