@@ -17,6 +17,7 @@ def read_poems(data_path):
     poem_data = []
     ## read through all files
     for poem in poems:
+        print(poem)
       ## with open(path + file, "rb") as train_file:
         poem_file_path = data_path + poem
         with open(poem_file_path, "rb") as poem_file:
