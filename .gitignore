@@ -1,2 +1,3 @@
-data/
-poetry_data/
+/data
+/poetry_data
+/past_poems
