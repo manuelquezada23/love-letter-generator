@@ -32,31 +32,28 @@ def read_poems(data_path):
     return poem_data
 
 def clean_data():
-    ############ Character per doc.
+    # get the characters for each doc
     chars = [len(x['corpus']) for x in corpus]
     print('\nCharacters per doc:\n', pd.Series(chars).describe())
     # remove outliers, less than 260 characters
     idx = [x > 260 for x in chars]
-    print('docs removed:', len(corpus) - sum(idx))
     corpus = list(np.array(corpus)[np.array(idx)])
 
 
-    ############ lines per doc, remove single liners
+    # get the lines for each doc and, remove single liners
     lines = [len(x['corpus'].split('\n')) for x in corpus]
     print('\nLines per doc:\n', pd.Series(lines).describe())
     # remove outliers. less than 10 lines
     idx = [((x > 8) & (x < 50)) for x in lines]
-    print('docs removed:', len(corpus) - sum(idx))
     corpus = list(np.array(corpus)[np.array(idx)])
 
 
-    ############ words count.
+    # count words for each doc
     words = [len(re.findall(r'\w+', x['corpus'])) for x in corpus]
     print('\nwords per doc:\n', pd.Series(words).describe())
     # remove outliers
     # less than 100 words
     idx = [((x > 30) & (x < 200)) for x in words]
-    print('docs removed:', len(corpus) - sum(idx))
     corpus = list(np.array(corpus)[np.array(idx)])
 
     words = [re.findall(r'\w+', x['corpus']) for x in corpus]
@@ -77,7 +74,7 @@ def clean_data():
           words_counter[['words','freq']][words_counter['len']>=6].head(10))
     
 
-    ##### Clean less frecuent characters
+    ## Clean through less frecuent characters
     # want all docs as a single string to get unique chars
     all_text = str()
     for x in corpus:
@@ -123,15 +120,13 @@ def clean_data():
     for doc in corpus:
         doc['corpus'] = doc['corpus'] + '.$'
 
+    # 
     return corpus
 
 
 def get_vocabulary(corpus):
     '''
-    Mapping is a step in which we assign an arbitrary number to a character/word
-    in the text. In this way, all unique characters/words are mapped to a number.
-    This is important, because machines understand numbers far better than text,
-    and this subsequently makes the training process easier.
+    making word dictionaries here
     '''
     # create dictionaries for character/number mapping
     print('\n---\nCreating word mapping dictionaries')
@@ -152,9 +147,7 @@ def get_vocabulary(corpus):
     
     return characters, n_to_char, char_to_n  
 
-# =============================================================================
-# split train and test
-# =============================================================================
+# split corpus into train and test 
 def corpus_split(corpus, split):
     # Train/Test per doc
     # create corpus index
@@ -165,15 +158,17 @@ def corpus_split(corpus, split):
     idx_test = [i for i in idx if i not in idx_train]
     # split corpus by index
     corpus_train = [corpus[i] for i in idx_train]
-    corpus_test = [corpus[i] for i in idx_test]    
-    # Docs stats corpus
-    print('\n--- Total docs in corpus', len(corpus))
-    print('split in:')
-    print('Train:', len(corpus_train))
-    print('Test:', len(corpus_test))
+    corpus_test = [corpus[i] for i in idx_test]   
+
+     
+    # # Docs stats corpus
+    # print('\n--- Total docs in corpus', len(corpus))
+    # print('split in:')
+    # print('Train:', len(corpus_train))
+    # print('Test:', len(corpus_test))
     return corpus_train, corpus_test
 
-# Create tensor data from corpus
+# Create tensor data from corpus and embeddings
 def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
     '''
     Transform list of documents into tensor format to be fed to a lstm network
@@ -208,8 +203,8 @@ def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
             data_x.append(sequence_encoded[:-1])
             data_y.append(sequence_encoded[1:])
             # random stride between 1-6
-            j+=int(np.random.uniform(stride[0], stride[1]+1))       
-    # Tensor structure
+            j+=int(np.random.uniform(stride[0], stride[1]+1)) 
+
     data_x = np.array(data_x) 
     data_y = np.array(data_y) 
     
@@ -279,9 +274,6 @@ def get_data(train_file, test_file):
     words_mapping = {'characters': characters,
                     'n_to_char': n_to_char,
                     'char_to_n': char_to_n}
-
-
-
 
     corpus_train, corpus_test = corpus_split(poem_corpus, split=SPLIT)
 
