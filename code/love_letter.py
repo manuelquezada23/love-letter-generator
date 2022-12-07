@@ -28,11 +28,11 @@ def main():
             print(poet.write_poem(seed))
             # write poem
             poem = poet.write_poem(seed)
-            # write poem as .txt in putpus
+            # save poem
             filename = convert_to_filename(poem.split('\n')[0])
             with open(POEMS_PATH + filename + '.txt', "w") as text_file:
                 text_file.write(poem)
-            # another poem?
+            print('Poem saved as: ' + filename + '.txt')
             repeat = input('Another poem? (Y/N) ')
             if repeat.lower() == 'n':
                 break

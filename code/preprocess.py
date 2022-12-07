@@ -157,7 +157,7 @@ def clean_data(corpus):
 
     # line space: '\r\n ' '\r\n' to '\n', '\r\r\n'
     for doc in corpus:
-        for pattern in ['\r\r\n', '\r\n ', '\r\n', '\n\n']:
+        for pattern in ['\r\r\n', '\r\n ', '\r\n', '\n\n', '\r']:
             doc['corpus'] = re.sub(pattern, '\n', doc['corpus'])
 
     # add special charater for at the begining and final of text.
@@ -324,10 +324,7 @@ def get_data():
                     'n_to_char': n_to_char,
                     'char_to_n': char_to_n}
 
-
-
-
-    corpus_train, corpus_test = corpus_split(poem_corpus, split=SPLIT)
+    corpus_train, corpus_test = corpus_split(corpus, split=SPLIT)
 
     train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
 
