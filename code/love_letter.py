@@ -17,7 +17,6 @@ def main():
         data_dict = pickle.load(data_file)
 
     POEMS_PATH = 'past_poems/'
-    # DATA_PATH = '../data/processed/processed_poems.pickle'
     poet_name = input('What is the name of the poet?\n\n')
     lover = input('Who is the letter dedicated to?\n\n')
     

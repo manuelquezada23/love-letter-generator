@@ -2,6 +2,10 @@
 
 by Manuel Quezada (mquezad1), Samantha Gundotra (sgundotr), Jose Urruticoechea (jurrutic), Juan Pablo Ramos Barroso (jramosba)
 
+### How to run
+1) Download this data folder and add it to the top-level directory
+2) Run `python love_letter.py`
+
 ### Introduction
 For our project we want to build a love-letter generator to revive modern romance. Users will input their recipient and we will generate a love letter (chunk of text) tailored to them. Our project falls into Natural Language Processing (NLP).
 
