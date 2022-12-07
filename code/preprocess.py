@@ -22,10 +22,10 @@ def read_poems(data_path):
     for poem in poems:
         # print(poem)
       ## with open(path + file, "rb") as train_file:
-        poem_file_path = data_path + poem
+        poem_file_path = poem
+        print("reading from path: ", poem_file_path)
             # print(file)
         with open(poem_file_path, "r", encoding='utf-8') as poem_file:
-
             print(poem_file_path, "poem being read")
             file = poem_file.read()
             # print(file)
@@ -49,8 +49,8 @@ def read_poems(data_path):
             ]
 
             valid = False
-            for character in file:
-                if character not in chars_allowed:
+            for char in chars_remove:
+                if char in file:
 
                     print(poem_file_path, "contains invalid character, so it is purged from system")
                     purge = purge + 1
@@ -70,7 +70,7 @@ def read_poems(data_path):
                 poem_data.append({'file': poem_file_path,
                             'corpus': file})
 
-    print(purge)
+    print("poems purged: ",purge)
     return poem_data
 
 def clean_data(corpus):
@@ -263,8 +263,8 @@ def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
 
     # output
     print('Outupt shape -', 'X:', data_x.shape, '- Y:', data_y.shape)
-    size = data_x.nbytes*1e-6 + data_y.nbytes*1e-6
-    size = print(int(size), 'Megabytes')
+    # size = data_x.nbytes*1e-6 + data_y.nbytes*1e-6
+    # size = print(int(size), 'Megabytes')
     return data_x, data_y
 
 def get_tensor_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
@@ -312,7 +312,7 @@ def get_data():
     # OUTPUT_FILE = 'NLP_data_poems_120_no-split'
 
     # read all .txt poems files
-    poem_dir_path = '../poetry_data/'
+    poem_dir_path = '../data/poetry_data'
     poem_corpus = read_poems(poem_dir_path)
 
     corpus = clean_data(poem_corpus)
@@ -337,12 +337,13 @@ def get_data():
             'test_y' : test_y}
 
     # save file
-    with open('data/processed/processed_poems.pickle', 'wb') as file:
+    with open('../data/processed/processed_poems.pickle', 'wb') as file:
         pickle.dump(data, file)
     print('Data saved in:', 'data/processed/processed_poems.pickle')
   
 
     return corpus_train, corpus_test
+
 
     # want to end with this:
     # return train_data, test_data, vocabulary

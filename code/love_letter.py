@@ -20,6 +20,7 @@ def main():
     # DATA_PATH = '../data/processed/processed_poems.pickle'
     poet_name = input('What is the name of the poet?\n\n')
     lover = input('Who is the letter dedicated to?\n\n')
+    
     poet = Poet(poet_name, lover, data_dict)
     
     while True:
