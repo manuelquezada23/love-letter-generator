@@ -10,7 +10,6 @@ def convert_to_filename(value):
     return value
 
 def main():
-    get_data()
 
     DATA_PATH = '../data/processed/processed_poems.pickle'
     with open(DATA_PATH, 'rb') as data_file:
@@ -18,8 +17,8 @@ def main():
 
     POEMS_PATH = 'past_poems/'
     # DATA_PATH = '../data/processed/processed_poems.pickle'
-    poet_name = input('What is the name of the poet?\n\n')
-    lover = input('Who is the letter dedicated to?\n\n')
+    poet_name = input('What is the name of the poet?\n')
+    lover = input('Who is the letter dedicated to?\n')
     poet = Poet(poet_name, lover, data_dict)
     
     while True:

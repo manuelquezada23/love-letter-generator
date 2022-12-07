@@ -7,18 +7,19 @@ class Poet:
     EMBED_OUT = 128
     HIDDEN_UNITS = [512, 512, 512, 512, 512]
 
-    def __init__(self, name, lover, data_dict, weight_path = WEIGHT_PATH):
-        self.model = model.LoveLetterGeneratorModel(batch_sz = 1, 
-                    encoding_dimension = [len(self.embedding_to_char), self.EMBED_OUT],
-                    hidden_units = self.HIDDEN_UNITS,
-                    optimizer= 'adam')
-        self.model.load_weights(self.WEIGHT_PATH) 
+    def __init__(self, name, lover, data_dict):
+        
         self.name = name
         self.lover = lover
         self.words_mapping = data_dict['words_mapping']
         self.characters = self.words_mapping['characters']
         self.n_to_char = self.words_mapping['n_to_char']
         self.char_to_n = self.words_mapping['char_to_n']
+        self.model = model.LoveLetterGeneratorModel(batch_sz = 1, 
+                    encoding_dimension = [len(self.n_to_char), self.EMBED_OUT],
+                    hidden_units = self.HIDDEN_UNITS,
+                    optimizer= 'adam')
+        self.model.load_weights(self.WEIGHT_PATH) 
 
         
     def random_sentence(corpus, min_seq=64, max_seq=128):
@@ -95,6 +96,3 @@ class Poet:
         print(signature, end ="")
         poem = poem + signature
         return poem
-
-
-    
