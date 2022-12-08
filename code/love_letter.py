@@ -3,6 +3,7 @@ import pickle
 from poet_class import Poet
 from preprocess import get_data
 import re
+from my_model import build_model
 
 def convert_to_filename(value):
     value = re.sub('[^\w\s-]', '', value).strip().lower()
@@ -16,23 +17,18 @@ def main():
         data_dict = pickle.load(data_file)
 
     POEMS_PATH = 'past_poems/'
-<<<<<<< HEAD
-    poet_name = input('What is the name of the poet?\n\n')
-    lover = input('Who is the letter dedicated to?\n\n')
-    
-=======
     # DATA_PATH = '../data/processed/processed_poems.pickle'
     poet_name = input('What is the name of the poet?\n')
     lover = input('Who is the letter dedicated to?\n')
->>>>>>> jose
+
     poet = Poet(poet_name, lover, data_dict)
     
     while True:
         try:
             seed = input('Feeling inspired? How do you want to start the poem\n\n')
-            print(poet.write_poem(seed))
             # write poem
             poem = poet.write_poem(seed)
+            print(poem)
             # save poem
             filename = convert_to_filename(poem.split('\n')[0])
             with open(POEMS_PATH + filename + '.txt', "w") as text_file:

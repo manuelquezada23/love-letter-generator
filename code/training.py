@@ -1,5 +1,5 @@
 import pickle
-from model import LoveLetterGeneratorModel
+import my_model
 from tensorflow.keras.callbacks import ModelCheckpoint
 
 EPOCHS = 30
@@ -25,19 +25,21 @@ char_to_n = words_mapping['char_to_n']
 MODEL_PATH = './models/'
 MODEL_NAME = 'love-letter-generator-model'
 
-LoveLetterGeneratorModel = LoveLetterGeneratorModel(batch_sz = BATCH_SIZE, 
+love_letter_model = my_model.build_model(batch_sz = BATCH_SIZE, 
                     encoding_dimension = [len(n_to_char), ENCODING_OUT],
                     hidden_units = HIDDEN_UNITS,
-                    optimizer= 'adam')
-
-model = LoveLetterGeneratorModel.model
+                    optimizer = 'adam')
 
 sample_train = (len(train_x)//BATCH_SIZE)*BATCH_SIZE
 
-checkpoint = ModelCheckpoint(str(MODEL_PATH + MODEL_NAME + '.h5'),
-                             verbose=1, period=3)
 
-model_history = model.fit(train_x[:sample_train,:], train_y[:sample_train,:],
+checkpoint = ModelCheckpoint(str(MODEL_PATH + MODEL_NAME + '.h5'),
+                             verbose=1, period=1)
+
+model_history = love_letter_model.fit(train_x[:sample_train,:], train_y[:sample_train,:],
                           epochs = EPOCHS,
                           batch_size = BATCH_SIZE,
-                          callbacks = [checkpoint]) 
+                          callbacks = [checkpoint])
+                          
+love_letter_model.save(str(MODEL_PATH + MODEL_NAME + '.h5'))
+
