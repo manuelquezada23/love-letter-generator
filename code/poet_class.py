@@ -1,26 +1,30 @@
-import model
+from my_model import build_model
 import re
 import numpy as np
+import tensorflow as tf
+import os
+from losses import scc_loss
 
 class Poet:
-    WEIGHT_PATH = "model/weights.h5"
+    MODEL_PATH = './models/love-letter-generator-model2.h5'
     EMBED_OUT = 128
     HIDDEN_UNITS = [512, 512, 512, 512, 512]
+    OPTIMIZER = 'adam'
+
 
     def __init__(self, name, lover, data_dict):
-        
         self.name = name
         self.lover = lover
         self.words_mapping = data_dict['words_mapping']
         self.characters = self.words_mapping['characters']
         self.n_to_char = self.words_mapping['n_to_char']
         self.char_to_n = self.words_mapping['char_to_n']
-        self.model = model.LoveLetterGeneratorModel(batch_sz = 1, 
-                    encoding_dimension = [len(self.n_to_char), self.EMBED_OUT],
-                    hidden_units = self.HIDDEN_UNITS,
-                    optimizer= 'adam')
-        self.model.load_weights(self.WEIGHT_PATH) 
+        self.model = self.generate_model()
 
+    def generate_model(self):
+        love_model = build_model(batch_sz = 1, encoding_dimension=[len(self.n_to_char), self.EMBED_OUT], hidden_units=self.HIDDEN_UNITS, optimizer=self.OPTIMIZER)
+        love_model.load_weights(str(self.MODEL_PATH))
+        return love_model
         
     def random_sentence(corpus, min_seq=64, max_seq=128):
         # use random sentence from corpus as seed
@@ -55,7 +59,7 @@ class Poet:
         # reshape for single batch predicton
         sequence_encoded = np.reshape(sequence_encoded, (1, len(sequence_encoded)))
         # model prediction
-        pred_encoded = model.predict(sequence_encoded)  
+        pred_encoded = self.model(sequence_encoded)  
         # last prediction in sequence
         pred = pred_encoded[0][-1]
         # from log probabilities to normalized probabilities
@@ -96,3 +100,5 @@ class Poet:
         print(signature, end ="")
         poem = poem + signature
         return poem
+
+    
