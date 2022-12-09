@@ -6,7 +6,7 @@ import os
 from losses import scc_loss
 
 class Poet:
-    MODEL_PATH = './models/love-letter-generator-model2.h5'
+    MODEL_PATH = './models/love-letter-generator-model.h5'
     EMBED_OUT = 128
     HIDDEN_UNITS = [512, 512, 512, 512, 512]
     OPTIMIZER = 'adam'
