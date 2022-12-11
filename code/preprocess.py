@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import nltk
 from functools import reduce
+from sklearn.utils import shuffle 
 import os
 import re
 import pickle
@@ -258,8 +259,7 @@ def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
     data_y = np.array(data_y) 
     
     # Shuffle data
-    data_x = tf.random.shuffle(data_x)
-    data_y = tf.random.shuffle(data_y)
+    data_x, data_y = shuffle(data_x, data_y)
 
     # output
     print('Outupt shape -', 'X:', data_x.shape, '- Y:', data_y.shape)
