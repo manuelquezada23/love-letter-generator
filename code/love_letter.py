@@ -11,13 +11,12 @@ def convert_to_filename(value):
     return value
 
 def main():
-
+    get_data()
     DATA_PATH = '../data/processed/processed_poems.pickle'
     with open(DATA_PATH, 'rb') as data_file:
         data_dict = pickle.load(data_file)
 
     POEMS_PATH = 'past_poems/'
-    # DATA_PATH = '../data/processed/processed_poems.pickle'
     poet_name = input('What is the name of the poet?\n')
     lover = input('Who is the letter dedicated to?\n')
 
@@ -25,7 +24,7 @@ def main():
     
     while True:
         try:
-            seed = input('Feeling inspired? How do you want to start the poem\n\n')
+            seed = input('Feeling inspired? How do you want to start the poem\n')
             # write poem
             poem = poet.write_poem(seed)
             print(poem)

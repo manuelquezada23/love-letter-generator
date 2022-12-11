@@ -3,7 +3,8 @@
 by Manuel Quezada (mquezad1), Samantha Gundotra (sgundotr), Jose Urruticoechea (jurrutic), Juan Pablo Ramos Barroso (jramosba)
 
 ### How to run
-1) Download this data folder and add it to the top-level directory
+1) Download this [poetry_data](https://drive.google.com/file/d/1ln5h7Kavsbkl5aDKYz3-iRUgBc3X5DnU/view) folder and add it to the `data` folder
+2) Download this [models](https://drive.google.com/drive/folders/1EErNArFD6KRrlJaJyANgeURUZdqHLTh-?usp=sharing) folder and add it to the `code` directory
 2) Run `python love_letter.py`
 
 ### Introduction
