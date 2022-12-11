@@ -5,7 +5,7 @@ by Manuel Quezada (mquezad1), Samantha Gundotra (sgundotr), Jose Urruticoechea (
 ### How to run
 1) Download this [poetry_data](https://drive.google.com/file/d/1ln5h7Kavsbkl5aDKYz3-iRUgBc3X5DnU/view) folder
 2) Create a `data` folder in the top-level directory
-3) Create a `processed` folder in the `data` folder and add a file called `processed_poems.pickle`
+3) Create a `processed` folder in the `data` folder and add an empty file called `processed_poems.pickle`
 4) Add the `poetry_data` folder to the `data` folder
 5) Download this [models](https://drive.google.com/drive/folders/1EErNArFD6KRrlJaJyANgeURUZdqHLTh-?usp=sharing) folder and add it to the `code` directory
 6) Run `python love_letter.py`
