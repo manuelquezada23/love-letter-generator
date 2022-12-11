@@ -6,10 +6,6 @@ from losses import scc_loss
 
 # model params
 def build_model(batch_sz, encoding_dimension, hidden_units, optimizer, loss=scc_loss):
-    '''
-    encoding_dim [in, out]
-    '''
-    print('\n---\nModel network')
     model = Sequential()
     model.add(Embedding(input_dim = encoding_dimension[0], output_dim = encoding_dimension[1],
                         batch_input_shape = [batch_sz, None]))
@@ -19,7 +15,6 @@ def build_model(batch_sz, encoding_dimension, hidden_units, optimizer, loss=scc_
     model.add(Dense(encoding_dimension[0]))
     model.compile(loss = loss,
                   optimizer = optimizer)
-    print(model.summary())
     return model
 
 

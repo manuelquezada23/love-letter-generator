@@ -78,7 +78,7 @@ class Poet:
         char =self.n_to_char[char_idx]
         return char
 
-    def write_poem(self, seed, max_seq=128, max_words=150, creativity=3):
+    def write_poem(self, seed, max_seq=128, max_words=150, creativity=7):
         # start poem with the seed
         poem = seed
         print(poem, end ="")
@@ -86,6 +86,7 @@ class Poet:
         final = True
         word_counter = len(re.findall(r'\w+', poem)) < max_words
         # ends poem generator if max word is passed or poem end with final dot ($)
+        print("\n\nDear " + self.lover + ",")
         while (word_counter & final):    
             # Prediction next character
             next_char = self.predict_next_char(poem, max_seq, creativity)
@@ -96,7 +97,7 @@ class Poet:
             final = poem[-1] != '$'
             word_counter = len(re.findall(r'\w+', poem)) < max_words        
         # add signature
-        signature = '\n\nAI.S.P\n\n'
+        signature = 'With love,\n ' + self.name + '\n'
         print(signature, end ="")
         poem = poem + signature
         return poem

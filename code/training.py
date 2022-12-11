@@ -32,7 +32,6 @@ love_letter_model = my_model.build_model(batch_sz = BATCH_SIZE,
 
 sample_train = (len(train_x)//BATCH_SIZE)*BATCH_SIZE
 
-
 checkpoint = ModelCheckpoint(str(MODEL_PATH + MODEL_NAME + '.h5'),
                              verbose=1, period=1)
 

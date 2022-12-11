@@ -25,10 +25,9 @@ def main():
     
     while True:
         try:
-            seed = input('Feeling inspired? How do you want to start the poem\n\n')
+            seed = input('Feeling inspired? How do you want to start the poem\n')
             # write poem
             poem = poet.write_poem(seed)
-            print(poem)
             # save poem
             filename = convert_to_filename(poem.split('\n')[0])
             with open(POEMS_PATH + filename + '.txt', "w") as text_file:

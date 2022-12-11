@@ -7,4 +7,4 @@ with open(DATA_PATH, 'rb') as data_file:
 
 poet = poet_class.Poet('Shakespeare', 'Juliet', data_dict)
 
-poem = poet.write_poem('hearts to respond')
+poem = poet.write_poem('I love you')
