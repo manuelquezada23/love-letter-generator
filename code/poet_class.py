@@ -9,7 +9,6 @@ class Poet:
     MODEL_PATH = './models/love-letter-generator-model.h5'
     EMBED_OUT = 128
     HIDDEN_UNITS = [512, 512, 512, 512, 512]
-    OPTIMIZER = 'adam'
 
     def __init__(self, name, recipient, data_dict):
         self.name = name
@@ -21,7 +20,7 @@ class Poet:
         self.model = self.generate()
 
     def generate(self):
-        love_model = build_model(batch_sz = 1, encoding_dimension=[len(self.n_to_char), self.EMBED_OUT], hidden_units=self.HIDDEN_UNITS, optimizer=self.OPTIMIZER)
+        love_model = build_model(batch_sz = 1, encoding_dimension=[len(self.n_to_char), self.EMBED_OUT], hidden_units=self.HIDDEN_UNITS, optimizer='adam')
         love_model.load_weights(str(self.MODEL_PATH))
         return love_model
         
