@@ -104,7 +104,7 @@ def clean_data(corp):
 """
 maps characters in a dictionary
 """
-def get_vocabulary(corpus):
+def map_characters(corpus):
 
     all_text = str()
     for x in corpus:
@@ -164,7 +164,7 @@ def get_data():
 
     corpus = clean_data(poem_corpus)
 
-    characters, n_to_char, char_to_n =  get_vocabulary(corpus)
+    characters, n_to_char, char_to_n =  map_characters(corpus)
 
     words_mapping = {'characters': characters,
                     'n_to_char': n_to_char,
@@ -176,14 +176,12 @@ def get_data():
     corpus_train = [corpus[i] for i in for_train]
     corpus_test = [corpus[i] for i in for_test]
 
-    train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
+    train_x, train_y = construct_data(corpus=corpus_train, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
 
     data = {'corpus': corpus,
             'words_mapping': words_mapping,
             'train_x': train_x ,
-            'train_y': train_y,
-            'test_x' : test_x,
-            'test_y' : test_y}
+            'train_y': train_y}
 
     # save file
     with open('../data/processed/processed_poems.pickle', 'wb') as file:
