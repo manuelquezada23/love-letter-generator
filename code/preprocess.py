@@ -51,7 +51,7 @@ def read_poems(data_path):
 """
 cleans data from unnecessary stuff 
 """
-def clean_data(corpus):
+def clean(corpus):
     chars = [len(x['corpus']) for x in corpus]
     idx = [x > 260 for x in chars]
     corpus = list(np.array(corpus)[np.array(idx)])
@@ -103,7 +103,7 @@ def clean_data(corpus):
 """
 maps characters in a dictionary
 """
-def get_vocabulary(corpus):
+def map_characters(corpus):
 
     all_text = str()
     for x in corpus:
@@ -152,7 +152,7 @@ def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
     data_x, data_y = shuffle(data_x, data_y)
     return data_x, data_y
 
-def get_tensor_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
+def get_built_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
   train_x, train_y = build_data(corpus_train, char_to_n, 
                                 max_seq = max_seq, stride=stride)
   if len(corpus_test):
@@ -171,9 +171,9 @@ def get_data():
     poem_dir_path = '../data/poetry_data'
     poem_corpus = read_poems(poem_dir_path)
 
-    corpus = clean_data(poem_corpus)
+    corpus = clean(poem_corpus)
 
-    characters, n_to_char, char_to_n =  get_vocabulary(corpus)
+    characters, n_to_char, char_to_n =  map_characters(corpus)
 
     words_mapping = {'characters': characters,
                     'n_to_char': n_to_char,
@@ -181,7 +181,7 @@ def get_data():
 
     corpus_train, corpus_test = corpus_split(corpus, split=SPLIT)
 
-    train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
+    train_x, train_y, test_x, test_y = get_built_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
 
     data = {'corpus': corpus,
             'words_mapping': words_mapping,

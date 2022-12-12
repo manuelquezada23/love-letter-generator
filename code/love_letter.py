@@ -19,9 +19,9 @@ def main():
 
     POEMS_PATH = 'code/'
     poet_name = input('What is the name of the poet writing?\n')
-    lover = input('Who is the poem/letter dedicated to?\n')
+    recipient = input('Who is the poem/letter dedicated to?\n')
 
-    poet = Poet(poet_name, lover, data_dict)
+    poet = Poet(poet_name, recipient, data_dict)
     
     while True:
         try:

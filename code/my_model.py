@@ -4,7 +4,6 @@ from tensorflow.keras.layers import Dense, LSTM
 from tensorflow.keras.layers import Embedding
 from losses import scc_loss
 
-# model params
 def build_model(batch_sz, encoding_dimension, hidden_units, optimizer, loss=scc_loss):
     model = Sequential()
     model.add(Embedding(input_dim = encoding_dimension[0], output_dim = encoding_dimension[1],
