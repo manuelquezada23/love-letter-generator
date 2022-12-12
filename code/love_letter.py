@@ -12,6 +12,7 @@ def convert_to_filename(value):
 
 def main():
     get_data()
+
     DATA_PATH = '../data/processed/processed_poems.pickle'
     with open(DATA_PATH, 'rb') as data_file:
         data_dict = pickle.load(data_file)
@@ -27,7 +28,7 @@ def main():
             seed = input('Feeling inspired? How do you want to start the poem/letter?\n')
             print("Writing...")
             # write poem
-            poem = poet.write_poem(seed)
+            poem = poet.create_poem(seed)
             # save poem
             filename = convert_to_filename(poem.split('\n')[0])
             with open(POEMS_PATH + filename + '.txt', "w") as text_file:

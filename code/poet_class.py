@@ -18,9 +18,9 @@ class Poet:
         self.characters = self.words_mapping['characters']
         self.n_to_char = self.words_mapping['n_to_char']
         self.char_to_n = self.words_mapping['char_to_n']
-        self.model = self.generate_model()
+        self.model = self.generate()
 
-    def generate_model(self):
+    def generate(self):
         love_model = build_model(batch_sz = 1, encoding_dimension=[len(self.n_to_char), self.EMBED_OUT], hidden_units=self.HIDDEN_UNITS, optimizer=self.OPTIMIZER)
         love_model.load_weights(str(self.MODEL_PATH))
         return love_model
@@ -40,7 +40,7 @@ class Poet:
             sequence = sequence[:max_seq]
         return text, sequence
 
-    def predict_next_char(self, sequence, max_seq=128, creativity=3):
+    def predict_character(self, sequence, max_seq=128, creativity=3):
         if len(sequence)==0:
             sequence = '\n'
         sequence = sequence[max(0, len(sequence)-max_seq):].lower() 
@@ -58,14 +58,14 @@ class Poet:
         char =self.n_to_char[char_idx]
         return char
 
-    def write_poem(self, seed, max_seq=128, max_words=150, creativity=3):
+    def create_poem(self, seed, max_seq=128, max_words=150, creativity=3):
         poem = seed
         print(poem, end ="")
         final = True
         word_counter = len(re.findall(r'\w+', poem)) < max_words
         print("\n\nDear " + self.lover + ",")
         while (word_counter & final):    
-            next_char = self.predict_next_char(poem, max_seq, creativity)
+            next_char = self.predict_character(poem, max_seq, creativity)
             print(next_char, end ="")
             poem = poem + next_char
             final = poem[-1] != '$'
