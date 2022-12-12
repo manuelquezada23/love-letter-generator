@@ -9,10 +9,11 @@ import re
 import pickle
 import glob
 
-"""
-reads poem 
-"""
+
 def read_poems(data_path):
+    """
+    reads poem 
+    """
     # https://stackoverflow.com/questions/7099290/how-to-ignore-hidden-files-using-os-listdir
     poems = glob.glob(os.path.join(data_path, '*'))
     print('Processing:', len(poems), 'files\n')
@@ -34,6 +35,7 @@ def read_poems(data_path):
             ]
             valid = False
             for char in chars_remove:
+                # If the poem has a character in the remove set, we completely remove poem from corpus
                 if char in file:
                     purge = purge + 1
                     break
@@ -42,6 +44,7 @@ def read_poems(data_path):
 
             if valid == True:
                 chars_remove = '[' + ''.join(chars_remove) + ']'
+                # Double checking that there are no characters left over
                 file = re.sub(chars_remove, ' ', file)
                 file = re.sub(' +', ' ', file).strip()
                 poem_data.append({'file': poem_file_path,
@@ -51,30 +54,28 @@ def read_poems(data_path):
 """
 cleans data from unnecessary stuff 
 """
-def clean_data(corpus):
-    chars = [len(x['corpus']) for x in corpus]
-    idx = [x > 260 for x in chars]
-    corpus = list(np.array(corpus)[np.array(idx)])
+def clean_data(corp):
+    # Remove poems with less than 260 characters
+    characters = [len(x['corpus']) for x in corp]
+    indices = [x > 260 for x in characters]
+    corp = list(np.array(corp)[np.array(indices)])
 
-    lines = [len(x['corpus'].split('\n')) for x in corpus]
-    idx = [((x > 8) & (x < 50)) for x in lines]
-    corpus = list(np.array(corpus)[np.array(idx)])
+    # Remove poems with less than 8 lines or more than 50 lines
+    lines = [len(x['corpus'].split('\n')) for x in corp]
+    indices = [((x > 8) & (x < 50)) for x in lines]
+    corp = list(np.array(corp)[np.array(indices)])
 
-    words = [len(re.findall(r'\w+', x['corpus'])) for x in corpus]
-    idx = [((x > 30) & (x < 200)) for x in words]
-    corpus = list(np.array(corpus)[np.array(idx)])
+    # Remove poems with less than 30 words or more than 200 words
+    words = [len(re.findall(r'\w+', x['corpus'])) for x in corp]
+    indices = [((x > 30) & (x < 200)) for x in words]
+    corp = list(np.array(corp)[np.array(indices)])
 
-    words = [re.findall(r'\w+', x['corpus']) for x in corpus]
-    words = [item for sublist in words for item in sublist]
-
-    words_counter = nltk.FreqDist(words)
-    words_counter = pd.DataFrame(words_counter.most_common())
-    words_counter.columns = ['words', 'freq']
-    words_counter['len'] = [len(x) for x in words_counter['words']]
 
     all_text = str()
-    for x in corpus:
+    for x in corp:
         all_text = all_text + x['corpus']
+
+    # Remove strange characters
 
     chars_remove = ['\t', '"', '%', '&', '\*', '\+', '/', '0', '1', '2', '3', '4', '侄', '¦'
                     '5', '6', '7', '8', '9', '=', '\[', '\]', '_',  '`', '{',
@@ -84,21 +85,21 @@ def clean_data(corpus):
     ]
 
     chars_remove = '[' + ''.join(chars_remove) + ']'
-    # erase from docs non meaningful characters
-    for doc in corpus:
+    # remove characters
+    for doc in corp:
         doc['corpus'] = re.sub(chars_remove, ' ', doc['corpus'])
         doc['corpus'] = re.sub(' +', ' ', doc['corpus']).strip()
 
-    # line space: '\r\n ' '\r\n' to '\n', '\r\r\n'
-    for doc in corpus:
+    # remove line breaks
+    for doc in corp:
         for pattern in ['\r\r\n', '\r\n ', '\r\n', '\n\n', '\r']:
             doc['corpus'] = re.sub(pattern, '\n', doc['corpus'])
 
-    # Model learns when to start/end
-    for doc in corpus:
+    # remove empty lines
+    for doc in corp:
         doc['corpus'] = doc['corpus'] + '.$'
 
-    return corpus
+    return corp
 
 """
 maps characters in a dictionary
@@ -108,7 +109,8 @@ def get_vocabulary(corpus):
     all_text = str()
     for x in corpus:
         all_text = all_text + x['corpus']
-  
+    
+    # from prev hw
     characters = sorted(list(set(all_text)))
     
     n_to_char = {n:char for n, char in enumerate(characters)}
@@ -116,47 +118,35 @@ def get_vocabulary(corpus):
     
     return characters, n_to_char, char_to_n  
 
-"""
-split, train, and test
-"""
-def corpus_split(corpus, split):
-    idx = [i for i in range(len(corpus))]
-    idx_train = np.random.choice(idx, size=int(len(corpus)*split), replace=False)
-    idx_test = [i for i in idx if i not in idx_train]
-    corpus_train = [corpus[i] for i in idx_train]
-    corpus_test = [corpus[i] for i in idx_test]    
-    return corpus_train, corpus_test
-
 # Create tensor data from corpus
-def build_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
+def construct_data(corpus, char_to_n, max_seq = 100, stride = [1,6]):
     data_x = []
     data_y = []
     sequences = []
     max_seq+=1  
+    print('Using:', len(corpus), 'files to train\n')
 
     for i in range(len(corpus)):
         text = corpus[i]['corpus']
         text_length = len(text)
         j = max_seq
         while j < text_length + stride[0]:
-            k_to = min(j, text_length) # 
-            k_from = (k_to - max_seq)            
-            sequence = text[k_from:k_to] 
-            sequence_encoded = np.array([char_to_n[x] for x in sequence]) 
+            k = min(j, text_length)          
+            sequence = text[(k - max_seq):k] 
+            encoded = np.array([char_to_n[x] for x in sequence]) 
             sequences.append(sequence)
-            data_x.append(sequence_encoded[:-1])
-            data_y.append(sequence_encoded[1:])
+            data_y.append(encoded[1:])
+            data_x.append(encoded[:-1])
             j+=int(np.random.uniform(stride[0], stride[1]+1))       
     data_x = np.array(data_x) 
     data_y = np.array(data_y) 
-    data_x, data_y = shuffle(data_x, data_y)
-    return data_x, data_y
+    return shuffle(data_x, data_y)
 
 def get_tensor_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
-  train_x, train_y = build_data(corpus_train, char_to_n, 
+  train_x, train_y = construct_data(corpus_train, char_to_n, 
                                 max_seq = max_seq, stride=stride)
   if len(corpus_test):
-      test_x, test_y = build_data(corpus_test, char_to_n, 
+      test_x, test_y = construct_data(corpus_test, char_to_n, 
                                     max_seq = max_seq, stride=stride)
   else:
       test_x, test_y = None, None
@@ -164,6 +154,7 @@ def get_tensor_data(corpus_train, corpus_test, char_to_n, max_seq, stride ):
   return train_x, train_y, test_x, test_y
 
 def get_data():
+    # We decided to use all data for training
     SPLIT = 1
     MAX_SEQ = 120
     STRIDE = [MAX_SEQ/2, MAX_SEQ] 
@@ -179,7 +170,11 @@ def get_data():
                     'n_to_char': n_to_char,
                     'char_to_n': char_to_n}
 
-    corpus_train, corpus_test = corpus_split(corpus, split=SPLIT)
+    indices = [i for i in range(len(corpus))]
+    for_train = np.random.choice(indices, size=int(len(corpus)*SPLIT), replace=False)
+    for_test = [i for i in indices if i not in for_train]
+    corpus_train = [corpus[i] for i in for_train]
+    corpus_test = [corpus[i] for i in for_test]
 
     train_x, train_y, test_x, test_y = get_tensor_data(corpus_train=corpus_train, corpus_test=corpus_test, char_to_n = char_to_n, max_seq=MAX_SEQ, stride=STRIDE)
 

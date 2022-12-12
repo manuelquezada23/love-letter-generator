@@ -28,14 +28,6 @@ def main():
             print("Writing...")
             # write poem
             poem = poet.write_poem(seed)
-            # save poem
-            filename = convert_to_filename(poem.split('\n')[0])
-            with open(POEMS_PATH + filename + '.txt', "w") as text_file:
-                text_file.write(poem)
-            print('Poem saved as: ' + filename + '.txt')
-            repeat = input('Another poem? (Y/N) ')
-            if repeat.lower() == 'n':
-                break
         except KeyboardInterrupt:
             break
 

@@ -58,19 +58,20 @@ class Poet:
         char =self.n_to_char[char_idx]
         return char
 
-    def write_poem(self, seed, max_seq=128, max_words=150, creativity=3):
+    def write_poem(self, seed, max_seq=128, max_words=150, creativity=10):
         poem = seed
         print(poem, end ="")
         final = True
         word_counter = len(re.findall(r'\w+', poem)) < max_words
         print("\n\nDear " + self.lover + ",")
+        print(poem, end ="")
         while (word_counter & final):    
             next_char = self.predict_next_char(poem, max_seq, creativity)
             print(next_char, end ="")
             poem = poem + next_char
             final = poem[-1] != '$'
             word_counter = len(re.findall(r'\w+', poem)) < max_words        
-        signature = 'With love,\n ' + self.name + '\n'
+        signature = '\n\nWith love,\n ' + self.name + '\n'
         print(signature, end ="")
         poem = poem + signature
         return poem

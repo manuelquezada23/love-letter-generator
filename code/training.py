@@ -39,7 +39,7 @@ def train():
                           epochs = EPOCHS,
                           batch_size = BATCH_SIZE,
                           callbacks = [checkpoint])
-                          
+
     love_letter_model.save(str(MODEL_PATH + MODEL_NAME + '.h5'))
 
 if __name__ == '__main__':
